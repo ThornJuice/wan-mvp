@@ -1,2 +1,2 @@
-# wan-mvp
-mvp模式的wan安卓客户端，重构中
+# wan-mvvm
+Kotlin+MVVM+LiveData+协程+Retrofit2版的玩安卓客户端
