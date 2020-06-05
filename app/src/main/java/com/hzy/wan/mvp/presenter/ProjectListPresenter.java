@@ -2,19 +2,19 @@ package com.hzy.wan.mvp.presenter;
 
 import com.example.base_mvp.base.BasePresenter;
 import com.example.base_mvp.http.HttpListener;
-import com.hzy.wan.bean.OfficialArticleBean;
-import com.hzy.wan.mvp.model.IOfficialArticalModel;
-import com.hzy.wan.mvp.model.impl.OfficialArticalModelImpl;
-import com.hzy.wan.mvp.view.OfficialArticalView;
+import com.hzy.wan.bean.ProjectBean;
+import com.hzy.wan.mvp.model.IProjectListModel;
+import com.hzy.wan.mvp.model.impl.ProjectListModelImpl;
+import com.hzy.wan.mvp.view.ProjectListView;
 
-public class OfficialArticalPresenter extends BasePresenter {
-    private OfficialArticalView mView;
-    private IOfficialArticalModel mModel;
+public class ProjectListPresenter extends BasePresenter {
+    private ProjectListView mView;
+    private IProjectListModel mModel;
     private int page = 1;
 
-    public OfficialArticalPresenter(OfficialArticalView view) {
+    public ProjectListPresenter(ProjectListView view) {
         this.mView = view;
-        mModel = new OfficialArticalModelImpl();
+        mModel = new ProjectListModelImpl();
     }
 
     public void getData(int id, boolean refresh) {
@@ -23,11 +23,11 @@ public class OfficialArticalPresenter extends BasePresenter {
             page = 1;
         }
 
-        mModel.getWxarticleList(id, page, new HttpListener<OfficialArticleBean>() {
+        mModel.getProjectList(id, page, new HttpListener<ProjectBean>() {
             @Override
-            public void onSuccess(OfficialArticleBean response) {
+            public void onSuccess(ProjectBean response) {
                 mView.dismissLoading();
-                OfficialArticleBean.DataBean data = response.getData();
+                ProjectBean.DataBean data = response.getData();
                 if (data.getDatas().size() > 0) {
                     mView.setData(data.getDatas(), page, false);
                     page++;

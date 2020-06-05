@@ -20,7 +20,7 @@ import java.util.List;
 
 public class OfficialAccountsFragmentMVP extends BaseMVPFragment<OfficialView, OfficialPresenter> implements OfficialView {
     BaseTitleBar title_bar;
-    ArrayList<OfficialArticalFragmentMVP> fragmentsList = new ArrayList<>();
+    ArrayList<OfficialArticleFragmentMVP> fragmentsList = new ArrayList<>();
     ViewPager viewPager;
     TabLayout tabLayout;
 
@@ -72,7 +72,7 @@ public class OfficialAccountsFragmentMVP extends BaseMVPFragment<OfficialView, O
         ArrayList<String> tabs = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             tabs.add(list.get(i).getName());
-            OfficialArticalFragmentMVP fragment = new OfficialArticalFragmentMVP();
+            OfficialArticleFragmentMVP fragment = new OfficialArticleFragmentMVP();
             Bundle bundle = new Bundle();
             bundle.putInt("id", list.get(i).getId());
             fragment.setArguments(bundle);

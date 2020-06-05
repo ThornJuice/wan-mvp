@@ -3,20 +3,16 @@ package com.hzy.wan.mvp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.hzy.baselib.listener.RetryClickListener;
 import com.hzy.baselib.util.ToastUtil;
 import com.hzy.baselib.widget.BaseTitleBar;
 import com.hzy.baselib.widget.gloading.Gloading;
-import com.hzy.wan.DaggerStudentComponent;
 import com.hzy.wan.R;
-import com.hzy.wan.StudentModule;
 import com.hzy.wan.activity.AgentWebView;
 import com.hzy.wan.adapter.BannerViewHolder;
 import com.hzy.wan.adapter.HomeAdapter;
@@ -30,19 +26,15 @@ import com.zhpan.bannerview.constants.IndicatorSlideMode;
 import com.zhpan.bannerview.constants.IndicatorStyle;
 import com.zhpan.bannerview.constants.PageStyle;
 import com.zhpan.bannerview.holder.HolderCreator;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import javax.inject.Inject;
 
 public class HomeFragmentMVP extends BaseMVPFragment<HomeView, HomePresenter> implements HomeView  {
     BaseTitleBar title_bar;
     BannerViewPager<BannerBean.DataBean, BannerViewHolder> bannerViewPager;
     View bannerView;
     RecyclerView recyclerView;
-    @Inject
     HomeAdapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -75,7 +67,7 @@ public class HomeFragmentMVP extends BaseMVPFragment<HomeView, HomePresenter> im
     private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-       // adapter = new HomeAdapter(null);
+        adapter = new HomeAdapter(null);
         recyclerView.setAdapter(adapter);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(
@@ -88,12 +80,6 @@ public class HomeFragmentMVP extends BaseMVPFragment<HomeView, HomePresenter> im
 
     @Override
     protected void initView(@NotNull View view) {
-        DaggerStudentComponent.builder()
-                .studentModule(new StudentModule(this))
-                .build()
-                .inject(this);
-
-
 
         title_bar = view.findViewById(R.id.title_bar);
         title_bar.setPageTitle("首页");

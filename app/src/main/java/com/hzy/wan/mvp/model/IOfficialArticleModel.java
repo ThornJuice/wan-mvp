@@ -6,7 +6,7 @@ import com.hzy.wan.bean.OfficialArticleBean;
 
 import io.reactivex.Observable;
 
-public interface IOfficialArticalModel extends IModel {
+public interface IOfficialArticleModel extends IModel {
 
     Observable<OfficialArticleBean> getWxarticleList(int id, int page, HttpListener httpListener);
 }

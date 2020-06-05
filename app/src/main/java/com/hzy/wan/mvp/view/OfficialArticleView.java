@@ -6,6 +6,6 @@ import com.hzy.wan.bean.OfficialArticleBean;
 
 import java.util.List;
 
-public interface OfficialArticalView extends IView {
+public interface OfficialArticleView extends IView {
     void setData(List<OfficialArticleBean.DataBean.DatasBean> list, int page, boolean end);
 }

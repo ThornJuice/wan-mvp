@@ -3,31 +3,26 @@ package com.hzy.wan.mvp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.hzy.baselib.listener.RetryClickListener;
-import com.hzy.baselib.util.ToastUtil;
 import com.hzy.baselib.widget.gloading.Gloading;
 import com.hzy.wan.R;
 import com.hzy.wan.activity.AgentWebView;
 import com.hzy.wan.base.BaseLazyMVPFragment;
-import com.hzy.wan.bean.HomeArticleBean;
-import com.hzy.wan.bean.OfficialArticleBean;
-import com.hzy.wan.mvp.presenter.OfficialArticalPresenter;
-import com.hzy.wan.mvp.view.OfficialArticalView;
-
+import com.hzy.wan.bean.ProjectBean;
+import com.hzy.wan.mvp.presenter.ProjectListPresenter;
+import com.hzy.wan.mvp.view.ProjectListView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class OfficialArticalFragmentMVP extends BaseLazyMVPFragment<OfficialArticalView, OfficialArticalPresenter> implements OfficialArticalView {
+public class ProjectListFragmentMVP extends BaseLazyMVPFragment<ProjectListView, ProjectListPresenter> implements ProjectListView {
 
     RecyclerView recyclerView;
     MyAdapter adapter;
@@ -36,7 +31,7 @@ public class OfficialArticalFragmentMVP extends BaseLazyMVPFragment<OfficialArti
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_official_list;
+        return R.layout.fragment_project_list;
     }
 
     @Override
@@ -47,17 +42,14 @@ public class OfficialArticalFragmentMVP extends BaseLazyMVPFragment<OfficialArti
                 mPresent.getData(mId, true);
             }
         });
-//        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-//                Object object = adapter.getItem(position);
-//                if (object instanceof HomeArticleBean.DataBean.DatasBean) {
-//                    Bundle bundle = new Bundle();
-//                    bundle.putString("url", ((HomeArticleBean.DataBean.DatasBean) object).getLink());
-//                    startActivity(new Intent(mContext, AgentWebView.class).putExtras(bundle));
-//                }
-//            }
-//        });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter a, View view, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString("url", adapter.getItem(position).getLink()+"");
+                startActivity(new Intent(mContext, AgentWebView.class).putExtras(bundle));
+            }
+        });
     }
 
     private void initRecyclerView(View view) {
@@ -93,14 +85,14 @@ public class OfficialArticalFragmentMVP extends BaseLazyMVPFragment<OfficialArti
 
     @Override
     protected void lazyLoad() {
-        mPresent = new OfficialArticalPresenter(this);
+        mPresent = new ProjectListPresenter(this);
         mLoadHolder.showLoading();
         mPresent.getData(mId, false);
     }
 
 
     @Override
-    public void setData(List<OfficialArticleBean.DataBean.DatasBean> list, int page, boolean end) {
+    public void setData(List<ProjectBean.DataBean.DatasBean> list, int page, boolean end) {
 
         if (page == 1) {
             adapter.setNewData(list);
@@ -137,14 +129,15 @@ public class OfficialArticalFragmentMVP extends BaseLazyMVPFragment<OfficialArti
         mLoadHolder.showLoadSuccess();
     }
 
-    public class MyAdapter extends BaseQuickAdapter<OfficialArticleBean.DataBean.DatasBean, BaseViewHolder> {
 
-        public MyAdapter(@Nullable List<OfficialArticleBean.DataBean.DatasBean> data) {
+    public class MyAdapter extends BaseQuickAdapter<ProjectBean.DataBean.DatasBean, BaseViewHolder> {
+
+        public MyAdapter(@Nullable List<ProjectBean.DataBean.DatasBean> data) {
             super(R.layout.item_official_accounts, data);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, OfficialArticleBean.DataBean.DatasBean item) {
+        protected void convert(BaseViewHolder helper, ProjectBean.DataBean.DatasBean item) {
             helper.setText(R.id.tv_title, item.getTitle());
             helper.setText(R.id.tv_date, item.getNiceDate());
         }
