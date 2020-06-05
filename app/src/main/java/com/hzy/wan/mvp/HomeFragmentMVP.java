@@ -2,56 +2,49 @@ package com.hzy.wan.mvp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
+
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import com.hzy.baselib.base.BaseFragment;
+
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.hzy.baselib.listener.RetryClickListener;
+import com.hzy.baselib.util.ToastUtil;
 import com.hzy.baselib.widget.BaseTitleBar;
+import com.hzy.baselib.widget.gloading.Gloading;
+import com.hzy.wan.DaggerStudentComponent;
 import com.hzy.wan.R;
+import com.hzy.wan.StudentModule;
 import com.hzy.wan.activity.AgentWebView;
 import com.hzy.wan.adapter.BannerViewHolder;
 import com.hzy.wan.adapter.HomeAdapter;
+import com.hzy.wan.base.BaseMVPFragment;
 import com.hzy.wan.bean.BannerBean;
 import com.hzy.wan.bean.HomeArticleBean;
+import com.hzy.wan.mvp.presenter.HomePresenter;
+import com.hzy.wan.mvp.view.HomeView;
 import com.zhpan.bannerview.BannerViewPager;
 import com.zhpan.bannerview.constants.IndicatorSlideMode;
 import com.zhpan.bannerview.constants.IndicatorStyle;
 import com.zhpan.bannerview.constants.PageStyle;
 import com.zhpan.bannerview.holder.HolderCreator;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class HomeFragmentMVP extends BaseFragment implements HomeView {
-    HomePresent mPresent;
+import javax.inject.Inject;
+
+public class HomeFragmentMVP extends BaseMVPFragment<HomeView, HomePresenter> implements HomeView  {
     BaseTitleBar title_bar;
     BannerViewPager<BannerBean.DataBean, BannerViewHolder> bannerViewPager;
     View bannerView;
     RecyclerView recyclerView;
+    @Inject
     HomeAdapter adapter;
     SwipeRefreshLayout swipeRefreshLayout;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 0:
-                    swipeRefreshLayout.setRefreshing(false);
-                    break;
-                case 1:
-                    bannerViewPager.create((List<BannerBean.DataBean>) msg.obj);
-                    break;
-                case 2:
-                    adapter.setNewData((List<HomeArticleBean.DataBean.DatasBean>) msg.obj);
-                    break;
-
-            }
-        }
-    };
 
     @Override
     protected int getLayoutId() {
@@ -59,19 +52,30 @@ public class HomeFragmentMVP extends BaseFragment implements HomeView {
     }
 
     @Override
-    protected void init() {
-
+    protected void initListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mPresent.getHomeArticle(true);
+            }
+        });
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Object object = adapter.getItem(position);
+                if(object instanceof  HomeArticleBean.DataBean.DatasBean){
+                    Bundle bundle = new Bundle();
+                    bundle.putString("url",  ((HomeArticleBean.DataBean.DatasBean) object).getLink());
+                    startActivity(new Intent(mContext,AgentWebView.class).putExtras(bundle));
+                }
+            }
+        });
     }
 
-    @Override
-    protected void initView(@NotNull View view) {
-        title_bar = view.findViewById(R.id.title_bar);
-        title_bar.setPageTitle("首页");
-        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-
+    private void initRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), RecyclerView.VERTICAL, false));
-        adapter = new HomeAdapter(null);
+       // adapter = new HomeAdapter(null);
         recyclerView.setAdapter(adapter);
         adapter.setEnableLoadMore(true);
         adapter.setOnLoadMoreListener(
@@ -79,27 +83,45 @@ public class HomeFragmentMVP extends BaseFragment implements HomeView {
                     mPresent.getHomeArticle(false);
                 }, recyclerView);
         adapter.disableLoadMoreIfNotFullPage();
-
-        initBanner();
         adapter.addHeaderView(bannerView);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+    }
+
+    @Override
+    protected void initView(@NotNull View view) {
+        DaggerStudentComponent.builder()
+                .studentModule(new StudentModule(this))
+                .build()
+                .inject(this);
+
+
+
+        title_bar = view.findViewById(R.id.title_bar);
+        title_bar.setPageTitle("首页");
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(mContext, R.color.theme));
+        initBanner();
+        initRecyclerView(view);
+
+        mLoadHolder = Gloading.getDefault().wrap(swipeRefreshLayout).withRetry(new RetryClickListener() {
             @Override
-            public void onRefresh() {
-                mPresent.getHomeArticle(true);
+            public void retry() {
+
             }
         });
     }
 
     @Override
     protected void initData() {
-        mPresent = new HomePresent(this);
+        mPresent = new HomePresenter(this);
+        getViewLifecycleOwner().getLifecycle().addObserver(mPresent);
+        mLoadHolder.showLoading();
         mPresent.getBanner();
         mPresent.getHomeArticle(false);
     }
 
     @Override
     public void setBanner(List<BannerBean.DataBean> data) {
-      //  Message msg = handler.obtainMessage(1, data);
+        //  Message msg = handler.obtainMessage(1, data);
         //handler.sendMessage(msg);
         bannerViewPager.create(data);
 //        getActivity().runOnUiThread(new Runnable() {
@@ -111,20 +133,20 @@ public class HomeFragmentMVP extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void setHomeArticle(List<HomeArticleBean.DataBean.DatasBean> list,int page,boolean end) {
+    public void setHomeArticle(List<HomeArticleBean.DataBean.DatasBean> list, int page, boolean end) {
 
-        if(page == 1){
+        if (page == 1) {
             adapter.setNewData(list);
-            if(end){
+            if (end) {
                 adapter.loadMoreEnd();
-            }else{
+            } else {
                 adapter.loadMoreComplete();
             }
-        }else{
+        } else {
             adapter.addData(list);
-            if(end){
+            if (end) {
                 adapter.loadMoreEnd();
-            }else{
+            } else {
                 adapter.loadMoreComplete();
             }
         }
@@ -133,16 +155,23 @@ public class HomeFragmentMVP extends BaseFragment implements HomeView {
     }
 
     @Override
-    public void dismissLoading() {
-       // Message msg = handler.obtainMessage(0, "");
-       // handler.sendMessag swipeRefreshLayout.setRefreshing(false);wwe(msg);
-        swipeRefreshLayout.setRefreshing(false);
+    public void showMessage() {
+        ToastUtil.INSTANCE.showToast("...");
     }
 
     @Override
-    public void loadMore() {
-
+    public void showLoading() {
+       mLoadHolder.showLoading();
     }
+
+    @Override
+    public void dismissLoading() {
+        // Message msg = handler.obtainMessage(0, "");
+        // handler.sendMessag swipeRefreshLayout.setRefreshing(false);wwe(msg);
+        swipeRefreshLayout.setRefreshing(false);
+        mLoadHolder.showLoadSuccess();
+    }
+
 
     private void initBanner() {
         bannerView = getLayoutInflater().inflate(R.layout.layout_home_banner, null);

@@ -2,6 +2,7 @@ package com.hzy.wan.http
 
 
 import com.hzy.wan.bean.*
+import io.reactivex.Observable
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
@@ -54,11 +55,19 @@ interface ApiService {
     suspend fun getNavi(): NaviBean
 
 
-    //首页文章列表
+    //首页文章列表 retrofit2方式
     @GET("/article/list/{page}/json")
     fun getHomeArticle2(@Path("page") page: Int): Call<HomeArticleBean>
 
-    //首页banner
+    //首页banner retrofit2方式
     @GET("/banner/json")
     fun getHomeBanner2(): Call<BannerBean>
+    //首页文章列表 retrofit2 +rxjava 方式
+    @GET("/article/list/{page}/json")
+    fun getHomeArticle3(@Path("page") page: Int): Observable<HomeArticleBean>
+
+    //首页banner retrofit2 + rxjava 方式
+    @GET("/banner/json")
+    fun getHomeBanner3(): Observable<BannerBean>
+
 }

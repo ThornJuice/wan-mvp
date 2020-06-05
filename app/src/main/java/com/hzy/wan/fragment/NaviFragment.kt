@@ -55,7 +55,7 @@ class NaviFragment : BaseFragment() {
             this.getData()
             this.naviLiveData.observe(viewLifecycleOwner, Observer {
                 it.showSuccess?.run {
-                    bindTabAndPager(this.data)
+                    bindTabAndPager()
                     leftAdapter.setNewData(this.data)
                     adapter.setNewData(this.data)
                 }
@@ -72,7 +72,7 @@ class NaviFragment : BaseFragment() {
         }
     }
 
-    private fun bindTabAndPager(list: List<NaviBean.DataBean>?) {
+    private fun bindTabAndPager() {
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)

@@ -1,7 +1,9 @@
 package com.hzy.wan.http;
 
 
-import com.hzy.wan.http.interceptor.HttpLoggingInterceptor;
+
+import com.example.base_mvp.http.interceptor.HttpLoggingInterceptor;
+import com.hzy.wan.base.Api;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -11,30 +13,30 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitManager {
+public class RetrofitManager2 {
     private static final long DEFAULT_TIME_OUT = 60;
     private static volatile OkHttpClient mOkHttpClient;
-    private ApiService mService;
-    private static RetrofitManager instance;
+    private Api mService;
+    private static RetrofitManager2 instance;
 
-    private RetrofitManager() {
+    private RetrofitManager2() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(ApiService.Companion.BASE_URL)
+                .baseUrl(Api.BASE_URL)
                 .client(getOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
-        mService = retrofit.create(ApiService.class);
+        mService = retrofit.create(Api.class);
     }
 
-    public static RetrofitManager getInstance() {
+    public static RetrofitManager2 getInstance() {
         if (instance == null) {
-            instance = new RetrofitManager();
+            instance = new RetrofitManager2();
         }
         return instance;
     }
 
-    public ApiService create() {
+    public Api create() {
         return mService;
     }
 
@@ -45,7 +47,7 @@ public class RetrofitManager {
      */
     private OkHttpClient getOkHttpClient() {
         if (mOkHttpClient == null) {
-            synchronized (RetrofitManager.class) {
+            synchronized (RetrofitManager2.class) {
                 if (mOkHttpClient == null) {
                     //指定缓存路径
                     //A.e("----------"+BaseApp.getApp().getCacheDir());

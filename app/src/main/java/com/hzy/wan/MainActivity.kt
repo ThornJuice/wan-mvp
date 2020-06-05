@@ -6,11 +6,8 @@ import androidx.fragment.app.FragmentManager
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.hzy.baselib.base.BaseActivity
-import com.hzy.wan.fragment.NaviFragment
-import com.hzy.wan.fragment.OfficialAccountsFragment
 import com.hzy.wan.fragment.ProjectsFragment
-import com.hzy.wan.fragment.SystemFragment
-import com.hzy.wan.mvp.HomeFragmentMVP
+import com.hzy.wan.mvp.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -21,10 +18,10 @@ class MainActivity : BaseActivity(), BottomNavigationBar.OnTabSelectedListener {
 
     private var fragmentManager: FragmentManager? = null
     private var homeFragment: HomeFragmentMVP? = null
-    private var officialAccountsFragment: OfficialAccountsFragment? = null
-    private var projectsFragment: ProjectsFragment? = null
-    private var systemFragment: SystemFragment? = null
-    private var naviFragment: NaviFragment? = null
+    private var officialAccountsFragment: OfficialAccountsFragmentMVP? = null
+    private var projectsFragment: ProjectFragmentMVP? = null
+    private var systemFragment: SystemFragmentMVP? = null
+    private var naviFragment: NaviFragmentMVP? = null
     private var mCurrentFragment: Fragment? = null
 
     override fun initView() {
@@ -74,16 +71,16 @@ class MainActivity : BaseActivity(), BottomNavigationBar.OnTabSelectedListener {
             homeFragment = HomeFragmentMVP()
         }
         if (officialAccountsFragment == null) {
-            officialAccountsFragment = OfficialAccountsFragment()
+            officialAccountsFragment = OfficialAccountsFragmentMVP()
         }
         if (projectsFragment == null) {
-            projectsFragment = ProjectsFragment()
+            projectsFragment = ProjectFragmentMVP()
         }
         if (systemFragment == null) {
-            systemFragment = SystemFragment()
+            systemFragment = SystemFragmentMVP()
         }
         if (naviFragment == null) {
-            naviFragment = NaviFragment()
+            naviFragment = NaviFragmentMVP()
         }
         val transaction = supportFragmentManager.beginTransaction()
         transaction.add(R.id.container, homeFragment!!, "1").hide(homeFragment!!)
