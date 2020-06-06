@@ -1,17 +1,17 @@
 package com.hzy.wan.mvp.presenter;
 
-import com.example.base_mvp.base.BasePresenter;
-import com.example.base_mvp.http.HttpListener;
+
+import com.hzy.wan.base.BasePresenter;
 import com.hzy.wan.bean.NaviBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.mvp.model.impl.NaviModelImpl;
 import com.hzy.wan.mvp.view.NaviView;
 
-public class NaviPresenter extends BasePresenter {
-    private NaviView mView;
+public class NaviPresenter extends BasePresenter<NaviView> {
     private NaviModelImpl mModel;
 
     public NaviPresenter(NaviView view) {
-        this.mView = view;
+        super(view);
         mModel = new NaviModelImpl();
     }
     public void getNavi(){

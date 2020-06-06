@@ -1,6 +1,6 @@
 package com.hzy.wan.mvp.model.impl;
 
-import com.example.base_mvp.http.HttpListener;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.http.RetrofitManager2;
 import com.hzy.wan.bean.BannerBean;
 import com.hzy.wan.bean.HomeArticleBean;
@@ -41,7 +41,7 @@ public class HomeModelImpl implements IHomeModel {
         return call;
     }
     @Override
-    public Observable<HomeArticleBean> getHomeArticle3(int page,HttpListener httpListener) {
+    public Observable<HomeArticleBean> getHomeArticle3(int page, HttpListener httpListener) {
         Observable<HomeArticleBean> observable = RetrofitManager2.getInstance().create().getHomeArticle3(page);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<HomeArticleBean>() {
             @Override

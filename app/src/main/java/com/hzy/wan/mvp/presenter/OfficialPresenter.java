@@ -1,19 +1,17 @@
 package com.hzy.wan.mvp.presenter;
 
-import com.example.base_mvp.base.BasePresenter;
-import com.example.base_mvp.http.HttpListener;
-import com.hzy.wan.bean.NaviBean;
+import com.hzy.wan.base.BasePresenter;
 import com.hzy.wan.bean.OfficialAccountBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.mvp.model.IOfficialModel;
 import com.hzy.wan.mvp.model.impl.OfficialModelImpl;
 import com.hzy.wan.mvp.view.OfficialView;
 
-public class OfficialPresenter extends BasePresenter {
-    private OfficialView mView;
+public class OfficialPresenter extends BasePresenter<OfficialView> {
     private IOfficialModel mModel;
 
     public OfficialPresenter(OfficialView view) {
-        this.mView = view;
+        super(view);
         mModel = new OfficialModelImpl();
     }
     public void getWxarticle(){

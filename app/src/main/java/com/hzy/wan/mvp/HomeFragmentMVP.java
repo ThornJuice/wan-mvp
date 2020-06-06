@@ -99,7 +99,6 @@ public class HomeFragmentMVP extends BaseMVPFragment<HomeView, HomePresenter> im
     @Override
     protected void initData() {
         mPresent = new HomePresenter(this);
-        getViewLifecycleOwner().getLifecycle().addObserver(mPresent);
         mLoadHolder.showLoading();
         mPresent.getBanner();
         mPresent.getHomeArticle(false);

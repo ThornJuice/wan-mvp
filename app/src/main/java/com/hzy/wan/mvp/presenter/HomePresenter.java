@@ -1,18 +1,18 @@
 package com.hzy.wan.mvp.presenter;
 
-import com.example.base_mvp.base.BasePresenter;
-import com.example.base_mvp.http.HttpListener;
+
+import com.hzy.wan.base.BasePresenter;
 import com.hzy.wan.bean.BannerBean;
 import com.hzy.wan.bean.HomeArticleBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.mvp.view.HomeView;
 import com.hzy.wan.mvp.model.impl.HomeModelImpl;
 
-public class HomePresenter extends BasePresenter {
-    private HomeView mView;
+public class HomePresenter extends BasePresenter<HomeView> {
     private HomeModelImpl mModel;
     private int page = 1;
     public HomePresenter(HomeView view){
-        this.mView = view;
+        super(view);
         mModel = new HomeModelImpl();
     }
     public void getBanner(){

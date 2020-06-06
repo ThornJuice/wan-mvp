@@ -1,8 +1,7 @@
 package com.hzy.wan.mvp.model.impl;
 
-import com.example.base_mvp.http.HttpListener;
 import com.hzy.wan.bean.NaviBean;
-import com.hzy.wan.bean.OfficialAccountBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.http.RetrofitManager2;
 import com.hzy.wan.mvp.model.INaviModel;
 

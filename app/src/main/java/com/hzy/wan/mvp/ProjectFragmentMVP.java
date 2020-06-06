@@ -22,7 +22,7 @@ import fragment.OfficialArticleFragment;
 
 public class ProjectFragmentMVP extends BaseMVPFragment<ProjectView, ProjectPresenter> implements ProjectView {
     BaseTitleBar title_bar;
-    ArrayList<OfficialArticleFragment> fragmentsList = new ArrayList<>();
+    ArrayList<OfficialArticleFragmentMVP> fragmentsList = new ArrayList<>();
     ViewPager viewPager;
     TabLayout tabLayout;
 
@@ -74,7 +74,7 @@ public class ProjectFragmentMVP extends BaseMVPFragment<ProjectView, ProjectPres
         ArrayList<String> tabs = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             tabs.add(list.get(i).getName());
-            OfficialArticleFragment fragment = new OfficialArticleFragment();
+            OfficialArticleFragmentMVP fragment = new OfficialArticleFragmentMVP();
             Bundle bundle = new Bundle();
             bundle.putInt("id", list.get(i).getId());
             fragment.setArguments(bundle);

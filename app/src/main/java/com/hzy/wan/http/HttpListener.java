@@ -1,4 +1,4 @@
-package com.example.base_mvp.http;
+package com.hzy.wan.http;
 
 public interface HttpListener<T> {
     void onSuccess(T response);

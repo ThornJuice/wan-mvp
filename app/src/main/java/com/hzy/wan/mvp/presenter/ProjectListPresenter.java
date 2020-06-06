@@ -1,19 +1,19 @@
 package com.hzy.wan.mvp.presenter;
 
-import com.example.base_mvp.base.BasePresenter;
-import com.example.base_mvp.http.HttpListener;
+
+import com.hzy.wan.base.BasePresenter;
 import com.hzy.wan.bean.ProjectBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.mvp.model.IProjectListModel;
 import com.hzy.wan.mvp.model.impl.ProjectListModelImpl;
 import com.hzy.wan.mvp.view.ProjectListView;
 
-public class ProjectListPresenter extends BasePresenter {
-    private ProjectListView mView;
+public class ProjectListPresenter extends BasePresenter<ProjectListView> {
     private IProjectListModel mModel;
     private int page = 1;
 
     public ProjectListPresenter(ProjectListView view) {
-        this.mView = view;
+        super(view);
         mModel = new ProjectListModelImpl();
     }
 

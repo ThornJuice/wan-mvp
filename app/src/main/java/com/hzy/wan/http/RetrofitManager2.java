@@ -2,8 +2,8 @@ package com.hzy.wan.http;
 
 
 
-import com.example.base_mvp.http.interceptor.HttpLoggingInterceptor;
 import com.hzy.wan.base.Api;
+import com.hzy.wan.http.interceptor.HttpLoggingInterceptor;
 
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;

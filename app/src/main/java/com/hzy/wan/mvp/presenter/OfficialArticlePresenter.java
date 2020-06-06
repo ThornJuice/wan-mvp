@@ -1,19 +1,19 @@
 package com.hzy.wan.mvp.presenter;
 
-import com.example.base_mvp.base.BasePresenter;
-import com.example.base_mvp.http.HttpListener;
+
+import com.hzy.wan.base.BasePresenter;
 import com.hzy.wan.bean.OfficialArticleBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.mvp.model.IOfficialArticleModel;
 import com.hzy.wan.mvp.model.impl.OfficialArticleModelImpl;
 import com.hzy.wan.mvp.view.OfficialArticleView;
 
-public class OfficialArticlePresenter extends BasePresenter {
-    private OfficialArticleView mView;
+public class OfficialArticlePresenter extends BasePresenter<OfficialArticleView> {
     private IOfficialArticleModel mModel;
     private int page = 1;
 
     public OfficialArticlePresenter(OfficialArticleView view) {
-        this.mView = view;
+        super(view);
         mModel = new OfficialArticleModelImpl();
     }
 

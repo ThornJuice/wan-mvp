@@ -1,17 +1,18 @@
 package com.hzy.wan.mvp.presenter;
 
-import com.example.base_mvp.base.BasePresenter;
-import com.example.base_mvp.http.HttpListener;
+
+import com.hzy.wan.base.BasePresenter;
 import com.hzy.wan.bean.SystemBean;
+import com.hzy.wan.http.HttpListener;
 import com.hzy.wan.mvp.model.impl.SystemModelImpl;
+import com.hzy.wan.mvp.view.ProjectListView;
 import com.hzy.wan.mvp.view.SystemView;
 
-public class SystemPresenter extends BasePresenter {
-    private SystemView mView;
+public class SystemPresenter extends BasePresenter<SystemView> {
     private SystemModelImpl mModel;
 
     public SystemPresenter(SystemView view) {
-        this.mView = view;
+        super(view);
         mModel = new SystemModelImpl();
     }
 

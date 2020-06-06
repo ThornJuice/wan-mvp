@@ -1,4 +1,4 @@
-package com.example.base_mvp.base;
+package com.hzy.wan.base;
 
 public interface IView {
     void showMessage();
